@@ -1,9 +1,9 @@
-<template>
-  <vuetify-app>
-    <vuetify-main>
-      <NuxtPage />
-    </vuetify-main>
+<script setup lang="ts">
+//
+</script>
 
-    <AppFooter />
-  </vuetify-app>
+<template>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>

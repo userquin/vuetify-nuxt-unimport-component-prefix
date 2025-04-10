@@ -37,11 +37,12 @@ export default defineNuxtConfig({
   },
   vuetify: {
     moduleOptions: {
+      includeTransformAssetsUrls: true,
       // check https://nuxt.vuetifyjs.com/guide/server-side-rendering.html
       ssrClientHints: {
         reloadOnFirstRequest: false,
         viewportSize: true,
-        prefersColorScheme: false,
+        prefersColorScheme: true,
 
         prefersColorSchemeOptions: {
           useBrowserThemeOnly: false,
