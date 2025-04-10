@@ -44,11 +44,6 @@ export default defineNuxtModule<ModuleOptions>({
 
         nuxt.hook('components:extend', async (c) => {
             const components = await prepareVuetifyComponents(vuetifyComponents)
-            console.log(components)
-            console.log(composables)
-            console.log(directives)
-            console.log(vuetifyComponents)
-            console.log(options)
             for (const component of components) {
                 c.push({
                     pascalName: component.pascalName,
