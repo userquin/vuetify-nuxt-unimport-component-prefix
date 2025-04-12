@@ -70,7 +70,7 @@ const weekdays = ref([
             label="View Mode"
             variant="outlined"
             hide-details
-        ></vuetify-select>
+        />
         <vuetify-select
             v-model="weekday"
             :items="weekdays"
@@ -79,7 +79,7 @@ const weekdays = ref([
             label="weekdays"
             variant="outlined"
             hide-details
-        ></vuetify-select>
+        />
       </vuetify-sheet>
       <vuetify-sheet>
         <vuetify-calendar
@@ -88,7 +88,7 @@ const weekdays = ref([
             :events="events"
             :view-mode="type"
             :weekdays="weekday"
-        ></vuetify-calendar>
+        />
       </vuetify-sheet>
     </div>
 
@@ -101,7 +101,7 @@ const weekdays = ref([
           :weekdays="weekday"
           hydrate-on-visible
           @hydrated="onHydrated"
-      ></lazy-vuetify-calendar>
+      />
     </vuetify-sheet>
   </div>
 </template>

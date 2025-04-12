@@ -29,11 +29,12 @@ export default defineNuxtConfig({
   modules: ['@nuxt/fonts', 'vuetify-nuxt-module', '@nuxt/eslint'],
 
   vuetifyAutoImport: {
-    moduleOptions: {
-      composables: { prefix: true },
-      components: { prefix: true },
-      directives: { prefix: true },
-    }
+    composables: { prefix: true },
+    components: { prefix: true },
+    directives: { prefix: true },
+    mode: {
+      configFile: 'assets/settings.scss',
+    },
   },
   vuetify: {
     moduleOptions: {
@@ -51,9 +52,11 @@ export default defineNuxtConfig({
 
       // /* If customizing sass global variables ($utilities, $reset, $color-pack, $body-font-family, etc) */
       // disableVuetifyStyles: true,
-      styles: {
+      styles: true,
+      // disable vuetify styles from the module
+      /*styles: {
         configFile: 'assets/settings.scss',
-      },
+      },*/
     },
   },
 })

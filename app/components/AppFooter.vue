@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  const year = useState('footer:date', () => new Date().getFullYear())
   const items = shallowRef([
     {
       title: 'Vuetify Documentation',
@@ -57,7 +58,7 @@
       class="text-caption text-disabled"
       style="position: absolute; right: 16px;"
     >
-      &copy; 2016-{{ (new Date()).getFullYear() }} <span class="d-none d-sm-inline-block">Vuetify, LLC</span>
+      &copy; 2016-{{ year }} <span class="d-none d-sm-inline-block">Vuetify, LLC</span>
       —
       <NuxtLink
         class="text-decoration-none on-surface"
