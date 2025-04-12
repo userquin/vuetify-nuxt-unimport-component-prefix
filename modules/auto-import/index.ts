@@ -3,20 +3,26 @@ import type {
     VuetifyComponentsOptions,
     VuetifyComposablesOptions,
     VuetifyDirectivesOptions,
-} from "vuetify/unimport-presets";
+} from "unplugin-vuetify/unimport-presets";
+import type {
+    VuetifyStylesOptions,
+} from "unplugin-vuetify";
+import {
+    VuetifyStylesVitePlugin,
+} from "unplugin-vuetify";
 import {
     VuetifyComposables,
     VuetifyDirectives,
     buildAddonsOptions,
     prepareVuetifyComponents,
-} from "vuetify/unimport-presets";
+} from "unplugin-vuetify/unimport-presets";
 import type {Addon, AddonsOptions} from "unimport";
+import { prepareTransformAssetUrls } from 'unplugin-vuetify/utils'
 import type {AssetURLOptions, AssetURLTagConfig} from "@vue/compiler-sfc";
 import type {ViteConfig} from "@nuxt/schema";
 import defu from 'defu'
-import { transformAssetUrls as vuetifyTransformAssetUrls } from 'vite-plugin-vuetify'
 
-export interface ModuleOptions {
+export interface ModuleOptions extends VuetifyStylesOptions {
     composables?: VuetifyComposablesOptions
     directives?: VuetifyDirectivesOptions
     components?: VuetifyComponentsOptions
@@ -33,7 +39,13 @@ export default defineNuxtModule<ModuleOptions>({
     },
     async setup(options, nuxt) {
 
-        const { directives, composables, components: vuetifyComponents } = options.moduleOptions
+        const {
+            directives,
+            composables,
+            components: vuetifyComponents,
+            mode,
+            registerApi,
+        } = options
 
         nuxt.hook('imports:sources', (sources) => {
             sources.push(
@@ -64,7 +76,7 @@ export default defineNuxtModule<ModuleOptions>({
         })
         // hack vuetify nuxt module removing the vuetify vite plugin
         nuxt.hook('vite:extendConfig', (viteInlineConfig) => {
-            if (vuetifyComponents.prefix) {
+            if (vuetifyComponents?.prefix) {
                 const transformAssetUrls = createTransformAssetUrls(
                     viteInlineConfig,
                 )
@@ -83,6 +95,9 @@ export default defineNuxtModule<ModuleOptions>({
                     }
                 }
             })
+            viteInlineConfig.plugins.push(VuetifyStylesVitePlugin({
+                mode, registerApi,
+            }))
         })
     }
 })
@@ -102,10 +117,7 @@ export function createTransformAssetUrls(viteInlineConfig: ViteConfig) {
         existingTransformAssetUrls = (existingTransformAssetUrls.tags ?? {}) as Record<string, string[]>
     }
 
-    const prefixed = Object.entries(vuetifyTransformAssetUrls).reduce((acc, [key, value]) => {
-        acc[key.replace(/^V/, 'Vuetify')] = value
-        return acc
-    }, {} as Record<string, string[]>)
+    const prefixed = prepareTransformAssetUrls(true)
 
     const transformAssetUrls = normalizeTransformAssetUrls(
         defu(existingTransformAssetUrls, prefixed)
@@ -148,7 +160,7 @@ function normalizeTransformAssetUrls(transformAssetUrls: Record<string, string[]
     let kebab: string
     let pascal: string
     for (const name of names) {
-        transformAssetUrls[name] = normalizeTransformAssetUrlsAttrs(transformAssetUrls[name])
+        transformAssetUrls[name] = normalizeTransformAssetUrlsAttrs(transformAssetUrls[name]!)
         kebab = toKebabCase(name)
         pascal = pascalize(name)
         if (!names.has(kebab))
